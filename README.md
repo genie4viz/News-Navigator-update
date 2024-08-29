@@ -1,7 +1,8 @@
 # News Navigator
 
 **News Navigator** is a web application that fetches and displays the latest news articles from various sources. It leverages the power of Python and Flask to create a dynamic and interactive news platform.
-**Deployed Link-** news-navigator.vercel.app
+
+**Deployed Link:** [news-navigator.vercel.app](https://news-navigator.vercel.app)
 
 ## Features
 
