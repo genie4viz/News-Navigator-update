@@ -1,28 +1,39 @@
-name: Schedule Fetch News
+name: Flask News App CI/CD
 
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   schedule:
-    - cron: '0 */12 * * *'  # Runs every 12 hours
+    - cron: '0 */12 * * *'  # This schedule runs `fetch_news.py` every 12 hours to fetch news
 
 jobs:
-  fetch_and_update_news:
+  build-and-run:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.12.5'
+    - name: Set up Python 3.12.5
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.12.5'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-      - name: Set environment variable
-        run: echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
+    - name: Fetch and update news
+      env:
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+      run: |
+        python fetch_news.py  # This will fetch and update the news database
 
-      - name: Run fetch_news.py
-        run: python fetch_news.py
+    - name: Start Flask application
+      env:
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+      run: |
+        python app.py &  # Runs Flask app in the background; consider deployment options for long-term running
