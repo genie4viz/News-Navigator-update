@@ -1,12 +1,6 @@
 name: Flask News App CI/CD
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   schedule:
     - cron: '0 */12 * * *'  # This schedule runs `fetch_news.py` every 12 hours to fetch news
 
@@ -31,9 +25,3 @@ jobs:
         MONGO_URI: ${{ secrets.MONGO_URI }}
       run: |
         python fetch_news.py  # This will fetch and update the news database
-
-    - name: Start Flask application
-      env:
-        MONGO_URI: ${{ secrets.MONGO_URI }}
-      run: |
-        python app.py &  # Runs Flask app in the background; consider deployment options for long-term running
