@@ -10,7 +10,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # MongoDB configuration using environment variable
-mongo_uri = os.getenv('MONGO_URI', 'your_default_connection_string_if_any')
+mongo_uri = os.getenv('MONGO_URI')
 client = MongoClient(mongo_uri)
 db = client['news_database']
 
